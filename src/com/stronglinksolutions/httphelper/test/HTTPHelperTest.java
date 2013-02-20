@@ -1,4 +1,4 @@
-package com.stronglinksolutions.httphelper.text;
+package com.stronglinksolutions.httphelper.test;
 
 import static org.junit.Assert.*;
 
@@ -28,11 +28,6 @@ public class HTTPHelperTest {
 				success = true;
 			}
 			
-			con.makeRequest("http://madeup.duh", "POST", null, "This is a test!");
-			
-			if(con.getStatusCode() == 502){
-				success = true;
-			}
 		} catch (MalformedURLException e) {
 			success = false;
 			e.printStackTrace();
