@@ -58,9 +58,11 @@ public class HTTPHelper {
 				Set headers = requestProperties.entrySet();
 				for(Iterator i = headers.iterator(); i.hasNext();){
 					Map.Entry map = (Map.Entry)i.next();
-					String key = map.getKey().toString();
-					String value = map.getValue().toString();
-					connection.setRequestProperty(key, value);				
+					if(map.getValue() != null){
+						String key = map.getKey().toString();
+						String value = map.getValue().toString();
+						connection.setRequestProperty(key, value);	
+					}
 				}
 			}
 			//Set HTTP Request Body
@@ -105,7 +107,6 @@ public class HTTPHelper {
 		    StringBuffer response = new StringBuffer(); 
 		    while((line = rd.readLine()) != null) {
 		    	response.append(line);
-		    	response.append(System.getProperty("line.separator"));
 		    }
 		    rd.close();
 		    
