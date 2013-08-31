@@ -60,6 +60,8 @@ public class HTTPHelper {
 	@SuppressWarnings("rawtypes")
 	public void makeRequest(String targetURL, String httpMethod, HashMap<String, String> requestHeaders, String requestBody, boolean useGZipCompression) throws MalformedURLException, ProtocolException, IOException{
 		try{
+			int contentLength = 0;
+			boolean requestBodyIsNull = (requestBody == null);
 			URL url = new URL(targetURL);
 			//Build Connection Object
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
@@ -76,6 +78,9 @@ public class HTTPHelper {
 					}					
 				}
 			}
+			
+			contentLength = requestBody.length();
+			
 			//Set HTTP Headers
 			if(requestHeaders != null){
 				Set headers = requestHeaders.entrySet();
@@ -88,17 +93,15 @@ public class HTTPHelper {
 					}
 				}
 			}
+			boolean doOutput = (!requestBodyIsNull) ? true : false;
 			//Set HTTP Request Body
-			if(requestBody != null){
-				connection.setDoOutput(true);
-				connection.setRequestProperty("Content-Length", "" + Integer.toString(requestBody.getBytes().length));
+			connection.setRequestProperty("Content-Length", String.format("%d", contentLength));//" + Integer.toString(requestBody.getBytes().length));
+			connection.setDoOutput(doOutput);
+			if(!requestBodyIsNull){
 			    DataOutputStream wr = new DataOutputStream (connection.getOutputStream ());
 				wr.writeBytes (requestBody);
 				wr.flush ();
 				wr.close ();
-			}else{
-				connection.setDoOutput(false);
-				connection.setRequestProperty("Content-Length", "" + Integer.toString(0));
 			}
 			
 			//Read Response headers
