@@ -53,8 +53,8 @@ public class HTTPHelper {
 		return _responseHeaders;
 	}	
 	
-	public void makeRequest(String targetURL, String httpMethod, HashMap<String, String> requestProperties, String requestBody) throws MalformedURLException, ProtocolException, IOException{
-		makeRequest(targetURL, httpMethod, requestProperties, requestBody, false);
+	public void makeRequest(String targetURL, String httpMethod, HashMap<String, String> requestHeaders, String requestBody) throws MalformedURLException, ProtocolException, IOException{
+		makeRequest(targetURL, httpMethod, requestHeaders, requestBody, false);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -67,7 +67,7 @@ public class HTTPHelper {
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 			//Set HTTP Method of Request
 			connection.setRequestMethod(httpMethod);
-			if(useGZipCompression && requestBody != null && requestBody.length()> 0){
+			if(useGZipCompression && !requestBodyIsNull && requestBody.length()> 0){
 				if(requestHeaders == null){
 					requestHeaders= new HashMap<String, String>();
 				}
@@ -79,7 +79,7 @@ public class HTTPHelper {
 				}
 			}
 			
-			contentLength = requestBody.length();
+			contentLength = (requestBodyIsNull) ? 0 : requestBody.length();
 			
 			//Set HTTP Headers
 			if(requestHeaders != null){
